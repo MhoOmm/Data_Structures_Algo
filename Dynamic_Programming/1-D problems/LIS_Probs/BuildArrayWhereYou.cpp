@@ -53,57 +53,48 @@ class Solution {
 // memoization
 
 class Solution {
-    public:
-    
-    
-        int dp[51][51][101];
-        int N,M,K;
-    
-    
-        int recur(int idx,int sc,int max)
+public:
+    int n,m,k;
+    int t[51][51][102];
+    int mod =1e9+7;
+    int solve(int idx , int sc, int max)
+    {
+        if(idx==n)
         {
-            int mod =1e9+7;
-            
-            if(idx==N)//base case
+            if(sc==k)
             {
-                if(sc==K)
-                {
-                    return 1;
-                }
-                else{
-                    return 0;
-                }
+                return 1;
+            }else{
+                return 0;
             }
-    
-            if(dp[idx][sc][max] != -1)
-            {
-                return dp[idx][sc][max];
-            }
-    
-            int result=0;
-            for(int i= 1;i<=M;i++)
-            {
-                if(i>max)
-                {
-                    result = (result+recur(idx+1,sc+1,i)) % mod;
-                }
-                else{
-                    result = (result+recur(idx+1,sc,max)) % mod;
-                }
-            }
-            return dp[idx][sc][max]=result % mod;
-    
-    
+
         }
-        
-        int numOfArrays(int n, int m, int k) {
-    
-            N=n;
-            M=m;
-            K=k;
-            memset(dp,-1,sizeof(dp));
-            return recur(0,0,0);
-    
+        if(t[idx][sc][max+1]!=-1)
+        {
+            return t[idx][sc][max+1];
         }
-    };
+
+        long long res = 0;
+        for(int i=1;i<=m;i++)
+        {
+           if(i>max)
+           {
+            res += (solve(idx+1,sc+1,i))%mod;
+           }else{
+            res += (solve(idx+1,sc,max))%mod;
+           }
+        }
+
+        return t[idx][sc][max+1] = res%mod;
+    }
+    int numOfArrays(int N, int M, int K) {
+       n=N;
+       m=M;
+       k=K;
+       memset(t,-1,sizeof(t));
+       return solve(0,0,-1);  
+    }
+};
+
+
 
