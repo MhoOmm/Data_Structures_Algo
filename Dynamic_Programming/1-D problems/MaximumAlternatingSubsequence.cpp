@@ -113,7 +113,7 @@ class Solution {
 
 
     // bottom up approach O(n^2)
-    class Solution {
+class Solution {
 public:
     int n;
     int ml;// stores the length of the longest lis;
@@ -139,4 +139,5 @@ public:
         return ml;
         
     }
+}
 
