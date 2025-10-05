@@ -53,56 +53,52 @@ class Solution {
 //bottom up approach
 
 class Solution {
-    public:
-        vector<int> largestDivisibleSubset(vector<int>& nums) {
-    
-            int n=nums.size();
-            
-            sort(begin(nums),end(nums));
-            // for getting to the answer
-            vector<int>t(n,1);
-            vector<int>prev_idx(n,-1);
-    
-            int maxlis=1;
-            int bigidx=0;
-    
-            for(int i=1;i<n;i++)
+public:
+    vector<int> largestDivisibleSubset(vector<int>& nums) {
+
+        int n = nums.size();
+
+        sort(begin(nums),end(nums));
+
+        vector<int>t(n,1);
+        vector<int>prev(n,-1);
+
+        vector<int>ans;
+
+        int big_idx = 0;
+        int maxLis = 1;
+        for(int i=1;i<n;i++)
+        {
+            for(int j=0;j<i;j++)
             {
-                for(int j=0;j<i;j++)
+                if(nums[i]%nums[j]==0)
                 {
-    
-                    if(nums[i]%nums[j]==0)
+                    if(t[i]<t[j]+1)
                     {
-                        if(t[i]<t[j]+1)
-    
-                        {
-                            t[i]=t[j]+1;
-                            prev_idx[i]=j;
-                        }
-    
-                        if(t[i]>maxlis)
-                        {
-                            maxlis=t[i];
-                            bigidx=i;
-                        }
-    
+                        t[i]=t[j]+1;
+                        prev[i]=j;
                     }
-    
+
+                    if(t[i]>maxLis){
+                        maxLis=t[i];
+                        big_idx=i;
+                    }
                 }
+
             }
-    
-            // for storing the ans
-            vector<int>ans;
-    
-            while(bigidx!=-1)
-            {
-                ans.push_back(nums[bigidx]);
-                bigidx=prev_idx[bigidx];
-            }
-            
-            reverse(ans.begin(),ans.end());
-            return ans;
-    
-    
         }
-    };
+
+        // filling up the ans;
+
+        while(big_idx!=-1)
+        {
+            ans.push_back(nums[big_idx]);
+            big_idx = prev[big_idx];
+        }
+
+        reverse(begin(ans),end(ans));
+
+        return ans;
+        
+    }
+};
