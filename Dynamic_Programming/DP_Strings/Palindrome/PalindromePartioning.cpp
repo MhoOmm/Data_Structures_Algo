@@ -4,8 +4,6 @@
 
 class Solution {
     public:
-    
-    
         void solve(string &s,int i,vector<string>&part,vector<vector<string>>&result,vector<vector<bool>>&t)
         {
             if(i==s.length())
