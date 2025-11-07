@@ -1,29 +1,37 @@
-// correct but giving wrong answer
 class Solution {
 public:
-    int caneat(long long mid, const vector<int>& piles) {
-        int h = 0;
-        for (int pile : piles) {
-            h += (pile + mid - 1) / mid;
+    long long caneat(int mid,vector<int>& piles, int h ){
+
+        long long countH = 0;
+        for(auto &num:piles)
+        {
+            countH += (num+mid-1)/mid;//ceiling division
         }
-        return h;
+
+        return countH;
     }
-
     int minEatingSpeed(vector<int>& piles, int h) {
-        long long start = 1;
-        long long endi = *max_element(piles.begin(), piles.end());
-        long long result = -1;
 
-        while (start <= endi) {
-            long long mid = start + (endi - start) / 2;
-            if (caneat(mid, piles) <= h) {
-                result = mid;
-                endi = mid - 1;
-            } else {
-                start = mid + 1;
+        long long n = piles.size();
+        long long lar = *max_element(piles.begin(),piles.end());
+
+        long long start = 1;
+        long long end = lar; 
+        int ans = 1;
+
+        while(start<=end)
+        {
+            long long mid = start + (end-start)/2 ;
+            if(caneat(mid,piles,h)<=h)
+            {
+                ans = mid; 
+                end = mid -1;
+            }else{
+                start = mid +1;
             }
         }
 
-        return (int)result;
+        return ans;
+        
     }
 };
