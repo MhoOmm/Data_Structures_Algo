@@ -72,7 +72,6 @@ public:
             result = (result + t[n-1][cell]) % M;
         }
 
-        return result;
-        
+        return result;     
     }
 };
