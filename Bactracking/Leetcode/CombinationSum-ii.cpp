@@ -34,5 +34,3 @@ public:
         
     }
 };
-
-// using for loop
