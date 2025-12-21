@@ -75,7 +75,6 @@ public:
             adj[u].push_back({v,wt});
             adj[v].push_back({u,wt});
         }
-
         vector<int>visited(n+1,false);
         int minwt = INT_MAX;
         dfs(1,adj,visited,minwt);
