@@ -1,4 +1,4 @@
-// Topological sorting
+// Topological sorting - simply give the points with inDeg =0
 class Solution {
 public:
     vector<int> findSmallestSetOfVertices(int n, vector<vector<int>>& edges) {
