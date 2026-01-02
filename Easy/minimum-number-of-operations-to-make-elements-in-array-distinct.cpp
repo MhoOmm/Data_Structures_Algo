@@ -39,12 +39,12 @@ public:
         {
            if(st.count(nums[i]))
            {
+              return ceil((i+1)/3.0);
               break;
            } 
            st.insert(nums[i]);
-           idx = i;
         }
 
-        return ceil((idx+2)/3);
+        return 0;
     }
 };
