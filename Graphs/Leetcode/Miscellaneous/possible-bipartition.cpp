@@ -1,3 +1,4 @@
+// bfs approach
 class Solution {
 public:
     bool bfs(int i,vector<vector<int>>&adj,vector<int>&color,int currC)
