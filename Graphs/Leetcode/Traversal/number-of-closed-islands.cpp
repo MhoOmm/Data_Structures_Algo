@@ -1,3 +1,51 @@
+// dfs using directions array
+class Solution {
+public:
+    int n,m;
+    vector<vector<int>>directions={{0,1},{1,0},{0,-1},{-1,0}};
+    bool dfs(int i,int j,vector<vector<int>>& grid)
+    {
+        if(i<0 || i>=n || j<0 || j>=m)
+        {
+            return false;
+        }
+        if(grid[i][j]==1)
+        {
+            return true;
+        }
+        grid[i][j] = 1;
+        bool ans = true;
+        for(auto &dir:directions){
+            int ni = i+dir[0];
+            int nj = j+dir[1];
+
+            ans &= dfs(ni,nj,grid);
+        }
+        return ans;
+    }
+    int closedIsland(vector<vector<int>>& grid) {
+        n = grid.size();
+        m = grid[0].size();
+        int count =0;
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<m;j++)
+            {
+                if(grid[i][j]==0)
+                {
+                    if(dfs(i,j,grid))
+                    {
+                        count++;
+                    }
+                }
+            }
+        }
+
+        return count;
+    }
+};
+
+// long approach
 class Solution {
 public:
     int n,m;
