@@ -1,0 +1,23 @@
+// Brute Force - TLE - O(n^2)
+class Solution {
+public:
+    long long countBadPairs(vector<int>& nums) {
+        int n  = nums.size();
+        int count =0;
+
+        for(int i=0;i<n-1;i++)
+        {
+            for(int j=i+1;j<n;j++)
+            {
+                if(nums[j]-nums[i] != (j-i)) 
+                {
+                    count++;
+                }
+            }
+        }    
+
+        return count;  
+    }
+};
+
+// optimized Approach
