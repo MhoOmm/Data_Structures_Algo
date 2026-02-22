@@ -1,0 +1,24 @@
+class Solution {
+public:
+    bool canPlaceFlowers(vector<int>& flower, int n) {
+        int size = flower.size();
+        for(int i=0;i<size;i++)
+        {
+            if(flower[i]==0)
+            {
+                int prev = (i == 0) ? 0 : flower[i - 1];
+                int next = (i == size - 1) ? 0 : flower[i + 1];
+
+                if(prev == 0 && next == 0) {
+                    flower[i] = 1;
+                    n--;
+
+                    if(n == 0)
+                        return true;
+                }
+            }
+        }
+
+        return n<=0;
+    }
+};
