@@ -31,27 +31,27 @@ public:
 
 class Solution {
 public:
-    int count(int n,int k,vector<int>&dp)
+    int t[46];
+    int solve(int num,int n)
     {
-        if(n==k)
+        if(num==n)
         {
             return 1;
         }
-        if(k>n)
+        if(num>n)
         {
             return 0;
         }
-        if(dp[k] != -1)
+        if(t[num]!=-1)
         {
-            return dp[k];
+            return t[num];
         }
-        return dp[k]=count(n,k+1,dp)+count(n,k+2,dp);
 
+        return t[num] = solve(num+1,n)+solve(num+2,n);
     }
     int climbStairs(int n) {
-        int i=0;
-        vector<int>dp(n+2,-1);
-        return count(n,i,dp);
+        memset(t,-1,sizeof(t));
+        return solve(0,n);
     }
 };
 
@@ -84,25 +84,24 @@ public:
 
 class Solution {
 public:
-    int count(int n,int k,vector<int>&dp)
-    {
-        int after=1;
-        int after2=0;
-        int curr=0;
-        for(int i=n-1;i>=0;i--)
-        {
-            curr=after+after2;
-            after2=after;
-            after=curr;
-            
-        }
-        return curr;
-
-    }
     int climbStairs(int n) {
-        int i=0;
-        vector<int>dp(n+2,-1);
-        return count(n,i,dp);
+        vector<int>t(n+1,-1);
+        if(n<=2)
+        {
+            return n;
+        }
+        t[1] = 1;
+        t[2] = 2;
+
+
+
+        for(int i=3;i<=n;i++)
+        {
+            t[i] = t[i-1]+t[i-2];
+        }
+
+        return t[n];
+
     }
 };
 
