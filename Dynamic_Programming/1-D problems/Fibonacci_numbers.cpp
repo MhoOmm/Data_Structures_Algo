@@ -22,25 +22,20 @@ class solution{
 //tc : o(n)
 //sc : o(n)
 
-class solution{
+class Solution {
+public:
+    int fib(int n) {
+        vector<int>t(n+1,-1);
+        if(n<=1)return n;
+        t[0] = 0;
+        t[1] = 1;
 
-    int fibon(vector<int>&dp, int n)
-    {
-        if(n<=1)
+        for(int i=2;i<=n;i++)
         {
-            return n;
+            t[i] = t[i-1]+t[i-2];
         }
-        if(dp[n]!=-1)
-        {
-            return dp[n];
-        }
-        return fibon(dp,n-1)+ fibon(dp,n-2);
-    }
 
-    int fib(int n){
-        vector<int>dp(n+1,-1);
-        return fibon(dp,n);
-
+        return t[n];
     }
 };
 
@@ -48,29 +43,22 @@ class solution{
 //tc : o(n)
 //sc : o(n)
 
-class solution{
-    int fib(int n)
-    {
-        // first figure out the base cases and then act upon it
+class Solution {
+public:
+    int fib(int n) {
+        vector<int>t(n+1,-1);
+        if(n<=1)return n;
+        t[0] = 0;
+        t[1] = 1;
 
-        if(n<=1)
+        for(int i=2;i<=n;i++)
         {
-            return n;
+            t[i] = t[i-1]+t[i-2];
         }
 
-        vector<int>dp(n+1,-1);
-        dp[0]=0;
-        dp[1]=1;
-        for(int i=2;i<n;i++)
-            {
-                dp[i]=dp[i-1]+dp[i-2];
-            }
-        return dp[n];
-
-        
+        return t[n];
     }
-}
-
+};
 // optimization
 //only using three variable
 
