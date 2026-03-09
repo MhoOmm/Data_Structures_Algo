@@ -1,6 +1,9 @@
 #include<iostream>
 using namespace std;
 
+// Recursion approach another approach - cant be memoized
+
+
 // recursion approach tc:O(2^n)
 class Solution {
     public:
@@ -41,78 +44,55 @@ class Solution {
 //memoization top down 
 // take 2d dp as do values change horhi hai
 // int dp[100001][2];
-    class Solution {
-        public:
-            typedef long long ll;
-            int n;
-        
-            ll dp[100001][2];//as length of nums can be 100000
-            
-        
-            ll recurr(int idx,bool flag,vector<int>&nums)
-            {
-                if(idx>=n){
-                    return 0;
-                }
-        
-                if(dp[idx][flag]!=-1)
-                {
-                    return dp[idx][flag];
-                }
-        
-                ll skip=recurr(idx+1,flag,nums);
-                ll val = nums[idx];
-                if(flag == false)
-                {
-                    val = -val;
-                }
-                ll take=recurr(idx+1,!flag,nums)+val;
-                
-        
-                return dp[idx][flag]=max(take,skip);
-            }
-        
-            long long maxAlternatingSum(vector<int>& nums) {
-        
-                n=nums.size();
-                int idx=0;//first inex hoga
-                bool flag=true;//initilaly add hoga kyunki 0 index pe hai
-                memset(dp,-1,sizeof(dp));
-                return recurr(idx,flag,nums);
-                
-            }
-        };
-
-
-
+class Solution {
+public:
+    long long  t[100001][2];
+    long long solve(vector<int>& nums,int i,bool isOdd)
+    {
+        if(i>=nums.size())
+        {
+            return 0;
+        } 
+        if(t[i][isOdd]!=-1)
+        {
+            return t[i][isOdd]; 
+        }
+        long long skip = solve(nums,i+1,isOdd);
+        long long val = nums[i];
+        if(isOdd)
+        {
+            val = -1*val;
+        }
+        long long take = val + solve(nums,i+1,!isOdd);
+        return t[i][isOdd] = max(take,skip);  
+    }
+    long long maxAlternatingSum(vector<int>& nums) {
+        memset(t,-1, sizeof(t));
+        return solve(nums,0,false);
+    }
+};
 // bottom up approach
 
 class Solution {
-    public:
-        typedef long long ll;
-        int n;
-    
-        long long maxAlternatingSum(vector<int>& nums) {
-    
-            n=nums.size();
-    
-            vector<vector<long long>>dp(n+1,vector<long long>(2,0));
-            for(int i=1;i<n+1;i++){
-    
-                dp[i][0]=max((dp[i-1][1]-nums[i-1]),dp[i-1][0]);
-    
-                dp[i][1]=max((dp[i-1][0]+nums[i-1]),dp[i-1][1]);
-    
-    
-            }
-            return max(dp[n][0],dp[n][1]);
-            
+public:
+    long long maxAlternatingSum(vector<int>& nums) {
+        int n = nums.size();
+        vector<vector<long long>> t(n+1,vector<long long>(2,0));
+
+        t[0][1] = nums[0];
+        t[0][0] = 0;
+
+        for(int i=1;i<n;i++)
+        {
+            t[i][0] = max((t[i-1][1]-nums[i]),t[i-1][0]);
+            t[i][1] = max((t[i-1][0]+nums[i]),t[i-1][1]);
         }
-    };
+        return max(t[n-1][0],t[n-1][1]);
+    }
+};
 
 
-
-    // bottom up approach O(n^2)
+// bottom up approach O(n^2)
 class Solution {
 public:
     int n;
