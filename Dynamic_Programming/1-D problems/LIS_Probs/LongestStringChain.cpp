@@ -5,76 +5,60 @@ using namespace std;
 
 //Recursion and memo
 class Solution {
-    public:
-        int n;
-    
-        int t[1001][1001];
-        bool issubsequence(string &a,string &b)
+public:
+    int t[1001][1001];
+    bool isPred(string s1,string s2)
+    {
+        int m = s1.length();
+        int n = s2.length();
+
+        if(m>=n || (n-m!=1))
         {
-            int M=a.length();
-            int N=b.length();
-            if((N-M)!=1 || M>=N )
-            {
-                return false;
-            }
-            int i=0;
-            int j=0;
-            while(i<M && j<N)
-            {
-                if(a[i]==b[j])
-                {
-                    i++;
-                }
-                j++;
-            }
-            return i==M; 
-    
+            return false;
         }
-    
-        static bool myfunction( string &word1,string &word2 )
+
+        int i=0;
+        int j=0;
+
+        while(i<m && j<n)
         {
-            return word1.length()<word2.length();
+            if(s1[i]==s2[j])
+            {
+                i++;
+            }
+            j++;
         }
-    
-        int recur(int i,int prev,vector<string>& words)
+        return i==m;
+    }
+    int solve(vector<string>& words,int i,int prev)
+    {
+        if(i>=words.size())
         {
-            if(i>=n)
-            {
-                return 0;
-            }
-            if(prev!=-1 && t[i][prev]!=-1)
-            {
-                return t[i][prev];
-            }
-    
-            int skip=recur(i+1,prev,words);
-    
-            int take=0;
-            if(prev==-1 || issubsequence(words[prev],words[i]) )
-            {
-                take=1+recur(i+1,i,words);
-            }
-    
-            if(prev!=-1)
-            {
-                t[i][prev]=max(take,skip);
-            }
-    
-            return max(take,skip);
+            return 0;
         }
-    
-    
-        int longestStrChain(vector<string>& words) {
-    
-            int prev=-1;
-    
-            sort(begin(words),end(words),myfunction);
-            n=words.size();
-            memset(t,-1,sizeof(t));
-    
-            return recur(0,prev,words);
+
+        if(t[i][prev+1]!=-1)
+        {
+            return t[i][prev+1];
         }
-    };
+
+        int skip = solve(words,i+1,prev);
+        int take = 0;
+        if( prev==-1 || isPred(words[prev],words[i]))
+        {
+            take = 1+ solve(words,i+1,i);
+        }
+
+        return t[i][prev+1] = max(take,skip);
+    }
+    int longestStrChain(vector<string>& words) {
+        memset(t,-1,sizeof(t));
+        sort(words.begin(),words.end(),[](string &a, string &b){
+            return a.length()<b.length();
+        });
+        return solve(words,0,-1);
+    }
+};
 
 
 // bottom up approach
