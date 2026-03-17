@@ -54,12 +54,12 @@ class Solution {
 
 class Solution {
 public:
-    int n,m,k;
+    int mod = 1e9 + 7;
     int t[51][51][102];
-    int mod =1e9+7;
-    int solve(int idx , int sc, int max)
+    int solve(int n,int m,int k, int i,int sc,int maxele)
     {
-        if(idx==n)
+        if(sc > k) return 0;
+        if(i>=n)
         {
             if(sc==k)
             {
@@ -67,34 +67,34 @@ public:
             }else{
                 return 0;
             }
-
         }
-        if(t[idx][sc][max+1]!=-1)
+
+        if(t[i][sc][maxele+1] !=-1)
         {
-            return t[idx][sc][max+1];
+            return t[i][sc][maxele+1];
         }
-
-        long long res = 0;
-        for(int i=1;i<=m;i++)
+        long long ans = 0;
+        for(int j=1;j<=m;j++)
         {
-           if(i>max)
-           {
-            res += (solve(idx+1,sc+1,i))%mod;
-           }else{
-            res += (solve(idx+1,sc,max))%mod;
-           }
+            if(j>maxele)
+            {
+                ans += solve(n,m,k,i+1,sc+1,j)%mod;
+            }
+            else{
+                ans += solve(n,m,k,i+1,sc,maxele)%mod;
+            }
         }
 
-        return t[idx][sc][max+1] = res%mod;
+        return t[i][sc][maxele+1] = ans%mod;
     }
-    int numOfArrays(int N, int M, int K) {
-       n=N;
-       m=M;
-       k=K;
-       memset(t,-1,sizeof(t));
-       return solve(0,0,-1);  
+    int numOfArrays(int n, int m, int k) {
+
+        memset(t,-1,sizeof(t));
+
+        //                 i,sc,maxele
+        return solve(n,m,k,0,0,-1);
+        
     }
 };
-
 
 
