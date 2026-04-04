@@ -1,54 +1,60 @@
 class Solution {
 public:
-    int n,m;
-    int result = 0;
-    vector<vector<int>>directions{{1,0},{-1,0},{0,1},{0,-1}};
-    void solve(int i,int j,int count,int nobs,vector<vector<int>>& grid){
-        if(i>=n||j>=m||i<0||j<0||grid[i][j] == -1)
+    int nobs;
+    int m,n;
+    int count;
+    vector<vector<int>>directions={{0,1},{0,-1},{1,0},{-1,0}};
+    void backtrack(vector<vector<int>>& grid,int i,int j,int curr)
+    {
+        if(i>=n||i<0||j>=m||j<0||grid[i][j]==-1)
         {
-            return ;
+            return;
         }
-
-        
-        if(grid[i][j]==2 && count==nobs){
-            result++;
+        if(grid[i][j]==2)
+        {
+            if(curr==nobs+1)
+            {
+                count++;
+            }
             return;
         }
 
-        int temp = grid[i][j];
-        grid[i][j] = -1;
         for(auto &dir:directions)
         {
             int ni = i+dir[0];
             int nj = j+dir[1];
-            solve(ni,nj,count+1,nobs,grid);
-        }
-        grid[i][j] = temp;
 
+            int temp = grid[i][j];
+            grid[i][j] = -1;
+            backtrack(grid,ni,nj,curr+1);
+            grid[i][j] = temp;
+        }
     }
     int uniquePathsIII(vector<vector<int>>& grid) {
 
-        n  = grid.size();
-        m  = grid[0].size();
+        n = grid.size();
+        m = grid[0].size();
+        int x=0,y =0;
 
-        // to count the number of non-obstacles
-        int sti,stj;
-        int nobs=0;
-        for(int i =0;i<n;i++)
+        nobs = 0;
+        count =0;
+        for(int i=0;i<n;i++)
         {
-            for(int j =0;j<m;j++)
+            for(int j=0;j<m;j++)
             {
-                if(grid[i][j]!=-1){
+                if(grid[i][j]==0)
+                {
                     nobs++;
                 }
-                if(grid[i][j]==1)
-                {
-                    sti = i;
-                    stj = j;
+                else if(grid[i][j]==1){
+                    x = i;
+                    y = j;
                 }
             }
         }
-        solve(sti,stj,1,nobs,grid);
-        return result;
+
+        backtrack(grid,x,y,0);
+
+        return count;
     }
 };
