@@ -1,25 +1,26 @@
 class Solution {
 public:
-
     struct trieNode{
-        bool eow = false;
+        bool eow;
         trieNode* child[26];
     };
     trieNode* getNode(){
-        trieNode* newn = new trieNode();
-        newn->eow = false;
-        for(int i =0;i<26;i++)
+        trieNode* node = new trieNode();
+        node->eow= false;
+        for(int i=0;i<26;i++)
         {
-            newn->child[i] = NULL;
+            node->child[i]= NULL;
         }
-        return newn;
+        return node;
     }
+
     trieNode* root;
-    void insert(string word){
+    void insert(string word)
+    {
         trieNode* crawl = root;
-        for(int i=0;i<word.length();i++)
+        for(auto &ch:word)
         {
-            int idx = word[i]-'a';
+            int idx = ch-'a';
             if(crawl->child[idx]==NULL)
             {
                 crawl->child[idx] = getNode();
@@ -28,41 +29,63 @@ public:
         }
         crawl->eow = true;
     }
-    string search(string prefix)
+
+    string prefixS(string word)
     {
         trieNode* crawl = root;
-        for(int i=0;i<prefix.length();i++)
+        string prefix = "";
+        for(auto &ch:word)
         {
-            int idx = prefix[i]-'a';
+            int idx = ch-'a';
             if(crawl->child[idx]==NULL)
+            {
+                return word;//no prefix is there
+            }
+            prefix.push_back(ch);
+            crawl= crawl->child[idx];
+
+            if(crawl->eow)
             {
                 return prefix;
             }
-            crawl = crawl->child[idx];
-            if(crawl->eow == true)
-            {
-                return prefix.substr(0,i+1);
-            }
         }
-        return prefix;
+
+        return word;
     }
-    string replaceWords(vector<string>& dictionary, string sentence) {
 
-        stringstream ss(sentence);
-        string word;
-        string result;
-
+    string prefixRep(vector<string>&words,vector<string>& dictionary)
+    {
         root = getNode();
+
         for(auto &word:dictionary)
         {
             insert(word);
         }
-
-        while(getline(ss,word,' '))
+        string result = "";
+        for(auto &word:words)
         {
-            result+= search(word) + ' ';
+            string rep = prefixS(word);
+            result += rep;
+            result += " ";
         }
-        result.pop_back();// to remove the last space
+        result.pop_back();
+
         return result;
+    }
+    string replaceWords(vector<string>& dictionary, string sentence) {
+        vector<string>words;
+        string temp="";
+        for(auto &ch:sentence){
+            if(ch==' ')
+            {
+                words.push_back(temp);
+                temp="";
+                continue;
+            }
+            temp.push_back(ch);
+        }
+        words.push_back(temp);
+        string ans =  prefixRep(words,dictionary);
+        return ans;
     }
 };
