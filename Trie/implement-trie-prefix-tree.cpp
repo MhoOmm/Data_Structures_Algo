@@ -1,70 +1,64 @@
 class Trie {
-public: 
-    // MAKING THE DATASTRUCTURE
-    struct trieNode {
+public:
+    struct trieNode{
         bool eow;
-        trieNode *children[26];
+        trieNode* children[26];
     };
-    // making a new node
+
     trieNode* getNode(){
-        trieNode* newn = new trieNode();
-        newn -> eow = false;
+        trieNode* node = new trieNode();
+        node->eow= false;
         for(int i=0;i<26;i++)
         {
-            newn->children[i] = NULL;
+            node->children[i] = NULL;
         }
-        return newn;
+        return node;
     }
 
-    trieNode* root;// Init node
-    // constructor
+    trieNode* root;
     Trie() {
         root = getNode();
     }
     
     void insert(string word) {
-        trieNode *crawl = root;
+        trieNode* crawl = root;
         for(auto &ch:word)
         {
-            int idx = ch-'a';
-            if(crawl->children[idx] == NULL)
+            if(crawl->children[ch-'a']== NULL)
             {
-                crawl->children[idx] = getNode();
+                crawl->children[ch-'a']= getNode();
             }
-            crawl = crawl->children[idx];
+            crawl = crawl->children[ch-'a'];
         }
-        crawl->eow  = true;
+        crawl->eow = true;
     }
     
     bool search(string word) {
-        trieNode *crawl = root;
+        trieNode* crawl = root;
         for(auto &ch:word)
         {
-            int idx = ch-'a';
-            if(crawl->children[idx] == NULL)
+            if(crawl->children[ch-'a']== NULL)
             {
                 return false;
             }
-            crawl = crawl->children[idx];
+            crawl = crawl->children[ch-'a'];
         }
-        return (crawl != NULL && crawl->eow  == true);
+        return crawl->eow ;
     }
     
     bool startsWith(string prefix) {
-        trieNode *crawl = root;
-        int n = prefix.length();
-        int i = 0;
+        trieNode* crawl = root;
+        int count =0;
         for(auto &ch:prefix)
         {
-            int idx = ch-'a';
-            if(crawl->children[idx] == NULL)
+            if(crawl->children[ch-'a']== NULL)
             {
                 return false;
             }
-            crawl = crawl->children[idx];
-            i++;
+            crawl = crawl->children[ch-'a'];
+            count++;
         }
-        return (i==n); 
+        return (count == prefix.length())?true:false; 
     }
 };
 
