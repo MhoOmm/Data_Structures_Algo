@@ -2,36 +2,37 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-
-// } Driver Code Ends
-
 class Solution {
-public:
+  public:
+    int n ;
     int t[1001][1001];
-    int solve(int W, vector<int> &val, vector<int> &wt, int n){
-        if(n == 0 || W == 0) {
+    int solve(int i,int W,vector<int> &val, vector<int> &wt)
+    {
+        if(i>=n || W==0)
+        {
             return 0;
         }
-        if(t[W][n]!=-1)
+        if(wt[i] > W )
         {
-            return t[W][n];
+            return solve(i+1,W,val,wt);
+        }
+        if(t[i][W]!=-1)
+        {
+            return t[i][W];
         }
         
-
-        if(wt[n-1] > W) {
-            return t[W][n]=solve(W, val, wt, n-1);  
-        }
-
-        int take = val[n-1] + solve(W - wt[n-1], val, wt, n-1);
-        int skip = solve(W, val, wt, n-1); 
-
-        return t[W][n]=max(take, skip);
+        
+        int take = val[i]+solve(i+1,W-wt[i],val,wt);
+        
+        int skip = solve(i+1,W,val,wt);
+        
+        return t[i][W]=max(take,skip);
     }
-
     int knapsack(int W, vector<int> &val, vector<int> &wt) {
-        int n = wt.size();
+        // code here
+        n = wt.size();
         memset(t,-1,sizeof(t));
-        return solve(W, val, wt, n);
+        return solve(0,W,val,wt);
     }
 };
 
