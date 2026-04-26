@@ -53,3 +53,48 @@ public:
         return solve(0,arr,prev); 
     }
 };
+
+
+// another solution without memoization coz very small constraints
+// O(2^n)
+class Solution {
+public:
+    bool isUnique(string s1)
+    {
+        vector<int>freq(26,0);
+        for(auto &ch:s1)
+        {
+            freq[ch-'a']++;
+        }  
+        for(int i=0;i<26;i++)
+        {
+            if(freq[i]>1)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    int solve(int i,vector<string>&arr, string word)
+    {
+        if(i>=arr.size())
+        {
+            return 0;
+        }
+        int take = 0;
+        if(isUnique(word+arr[i]))
+        {
+            string temp = word;
+            word = word + arr[i];
+            take = arr[i].length() + solve(i+1,arr,word);
+            word = temp;
+        }
+        int skip = solve(i+1,arr, word);
+
+        return max(take,skip);
+    }
+    int maxLength(vector<string>& arr) {
+        return solve(0,arr,"");
+    }
+};
