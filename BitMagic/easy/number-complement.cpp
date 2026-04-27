@@ -28,3 +28,22 @@ public:
         return ans;  
     }
 };
+
+
+// Optimised way
+class Solution {
+public:
+    int findComplement(int n) {
+
+        int count =0;
+        int temp= n;
+        while(n>0)
+        {
+            count++;
+            n>>=1;
+        }
+        long long mask = (1LL << count) - 1;
+        return temp^mask;
+    }
+};
+    
