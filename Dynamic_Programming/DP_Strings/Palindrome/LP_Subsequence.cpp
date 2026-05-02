@@ -88,41 +88,39 @@ class Solution {
 // recur+ memoiztion
 
 class Solution {
-    public:
-    
-        int n;
-        int t[1001][1001];
-    
-        int recur(string &s,int i,int j)
+public:
+    int t[1001][1001];
+    int solve(string &s,int i,int j)
+    {
+        if(i>j)
         {
-            if(i>j)
-            {
-                return 0;
-            }
-    
-            if(i==j) return 1;
-    
-            if(t[i][j]!=-1)
-            {
-                return t[i][j];
-            }
-    
-            if(s[i]==s[j])
-            {
-                return t[i][j]=2+recur(s,i+1,j-1);
-            }else{
-                return t[i][j]=max(recur(s,i+1,j),recur(s,i,j-1));
-            }
+            return 0;
         }
-    
-    
-        int longestPalindromeSubseq(string s) {
-    
-            memset(t,-1,sizeof(t));
-            n= s.length();
-            return recur(s,0,n-1);
+        if(i == j)
+        {
+            return 1;
         }
-    };
+        if(t[i][j]!=-1)
+        {
+            return t[i][j];
+        }
+        if(s[i]==s[j])
+        {
+            return t[i][j] = 2+solve(s,i+1,j-1);
+        }
+
+        int left = solve(s,i+1,j);
+        int right = solve(s,i,j-1);
+
+        return t[i][j]= max(left,right);
+    }
+    int longestPalindromeSubseq(string s) {
+        int start = 0;
+        int n = s.length();
+        memset(t,-1,sizeof(t));
+        return solve(s,start,n-1);
+    }
+};
 
 
 // bottom up using blurprint
