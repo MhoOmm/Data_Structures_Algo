@@ -1,41 +1,35 @@
 class Solution {
 public:
-    int  n;
+    int mod = 1e9 + 7;
     int t[100001];
-    const int mod = 1e9+7;
-    int solve(int i,string&s,int k)
-    {
-        if(i>=n)
+    int solve(string &s,int k,int i){
+        if(i>=s.length())
         {
-            return 1;
+            return 1; // count this one and further
         }
-        if(s[i]=='0')
+        if(s[i] == '0')
         {
-            return 0;
+            return 0; // no preceding zeros for a number
         }
-        if(t[i]!=-1)
-        {
+        if(t[i]!=-1){
             return t[i];
         }
-        long ans=0;
-        long num=0;
-        for(int end=i;end<s.length();end++){
-
-            num=(num*10)+(s[end]-'0');
+        long long num =0;// num from now
+        int count =0; // iska aur beta ka count
+        for(int start=i;start<s.length();start++){
+            num = num*10 + (s[start]-'0');
             if(num>k)
             {
-                break;
+                break; // further explore karke bhi bade hi milenge
             }
-            ans=(ans%mod+solve(end+1,s,k)%mod)%mod;
 
+            count = (count + solve(s,k,start+1))%mod;
         }
-        return t[i]=ans;
+
+        return t[i]= count;
     }
     int numberOfArrays(string s, int k) {
-
-        n=s.length();
         memset(t,-1,sizeof(t));
-        return solve(0,s,k);
-        
+        return solve(s,k,0);
     }
 };
