@@ -1,48 +1,37 @@
 
 //recur + memoization
 class Solution {
-    public:
-    
-        int m,n;
-    
-        int t[101][101];
-    
-        int solve(int i,int j,vector<vector<int>>& obs)
+public:
+    int m,n;
+    int t[101][101];
+    int solve(int i,int j,vector<vector<int>>& grid)
+    {
+        if(i==m-1 && j==n-1)
         {
-            if(i==m-1 && j==n-1 && obs[m-1][n-1]!=1)
-            {
-                return 1;
-            }
-            if(i<0||i>=m||j>=n||j<0)
-            {
-                return 0;
-            }
-            if(obs[i][j]==1)
-            {
-                return 0;
-            }
-            if(t[i][j]!=-1)
-            {
-                return t[i][j];
-            }
-    
-            int right=solve(i,j+1,obs);
-            int down=solve(i+1,j,obs);
-    
-            return t[i][j]=right+down;
-    
+            return grid[i][j]==0;
         }
-        int uniquePathsWithObstacles(vector<vector<int>>& obs) {
-            m = obs.size();
-            n = obs[0].size();
-    
-            memset(t,-1,sizeof(t));
-    
-            return solve(0,0,obs);
-    
-            
+
+        if(i>=m || j>=n || i<0 || j<0 || grid[i][j]==1){
+            return 0;
         }
-    };
+        if(t[i][j]!=-1){
+            return t[i][j];
+        }
+
+        // right
+        int right = solve(i,j+1,grid);
+        // down
+        int down = solve(i+1,j,grid);
+
+        return t[i][j] =  down+right;
+    }
+    int uniquePathsWithObstacles(vector<vector<int>>& grid) {
+        m = grid.size();
+        n = grid[0].size();
+        memset(t,-1,sizeof(t));
+        return solve(0,0,grid);
+    }
+};
 
 //bottom up 
 
