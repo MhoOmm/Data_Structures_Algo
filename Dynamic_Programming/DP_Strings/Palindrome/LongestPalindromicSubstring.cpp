@@ -2,44 +2,39 @@
 #include<cstring>
 class Solution {
 public:
-    int t[1001][1001];
-    bool check(int i ,int j,string &s)
+    int  t[1001][1001];
+    bool solve(int i,int j,string &s)
     {
-        if(i>j)return true;
-
+        if(i>j)
+        {
+            return true;
+        }
         if(t[i][j]!=-1)
         {
             return t[i][j];
         }
-
-        if(s[i]==s[j])return t[i][j] =check(i+1,j-1,s);
-
-        return  t[i][j]=false;
+        if(s[i]==s[j]){
+            return t[i][j] =solve(i+1,j-1,s);
+        }
+        return t[i][j] = false;
     }
     string longestPalindrome(string s) {
-
         int n = s.length();
-        if(n==1)
-        {
-            return s;
-        }
+        int maxLen = 1;
         memset(t,-1,sizeof(t));
-        string ans = s.substr(0,1);
-        int maxLength = 1;
+        string longest = s.substr(0,1);
         for(int i=0;i<n;i++){
-            for(int j = i;j<n ;j++)
-            {
-                if(check(i,j,s)){
-                    int l = (j-i+1);
-                    if(l>maxLength){
-                        maxLength = l;
-                        ans = s.substr(i,l);
+            for(int j=i;j<n;j++){
+                if(solve(i,j,s)){
+                    int l = j-i+1;
+                    if(l>maxLen){
+                        maxLen = l;
+                        longest = s.substr(i,l);
                     }
                 }
             }
         }
-
-        return ans;   
+        return longest;
     }
 };
 
