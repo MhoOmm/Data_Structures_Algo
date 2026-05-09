@@ -1,32 +1,54 @@
+// brute force - TLE 
+class Solution {
+public:
+    int solve(vector<int>& energy,int i, int k)
+    {
+        if(i>=energy.size()){
+            return 0;
+        }
+        return energy[i] + solve(energy,i+k,k);
+    }
+    int maximumEnergy(vector<int>& energy, int k) {
+        int n = energy.size();
+        int maxSum = INT_MIN;
+        for(int i=0;i<n;i++)
+        {
+            int sum = solve(energy,i,k);
+            maxSum = max(sum,maxSum);
+        }
+        return maxSum;
+    }
+};
 // Recursion + Memoization
 class Solution {
 public:
-    int n;
-    int solve(int i,int k,vector<int>&energy,vector<int>&t)
+    vector<int>t;
+    int solve(vector<int>& energy,int i, int k)
     {
-        if(i>=n){
+        if(i>=energy.size()){
             return 0;
         }
         if(t[i]!=INT_MIN)
         {
             return t[i];
         }
-        return t[i] =energy[i]+solve(i+k,k,energy,t);
+        return t[i] =  energy[i] + solve(energy,i+k,k);
     }
     int maximumEnergy(vector<int>& energy, int k) {
-
-        n= energy.size();
-        int maxE = INT_MIN;
-        vector<int>t(n, INT_MIN);
+        int n = energy.size();
+        int maxSum = INT_MIN;
+        for(int i=0;i<100001;i++)
+        {
+            t[i]=INT_MIN;
+        }
         for(int i=0;i<n;i++)
         {
-            int en  = solve(i,k,energy,t);
-            maxE = max(maxE,en);
+            int sum = solve(energy,i,k);
+            maxSum = max(sum,maxSum);
         }
-        return maxE; 
+        return maxSum;
     }
 };
-
 
 // Bottom up - Approach
 
