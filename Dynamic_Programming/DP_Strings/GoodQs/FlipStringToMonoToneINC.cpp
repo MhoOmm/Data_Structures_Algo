@@ -1,48 +1,44 @@
 //recursion +memoization
 class Solution {
 public:
-    int n;
-    int solve(int i,int prev,string &s,vector<vector<int>>&t)
+    vector<vector<int>>t;
+    int solve(int i,int prev,string &s)
     {
-        if(i>=n)
+        if(i>=s.length())
         {
             return 0;
         }
-        if(t[i][prev] != -1)
+        if(t[i][prev]!=-1)
+        {
             return t[i][prev];
-
-        int flip=INT_MAX;
-        int noflip=INT_MAX;
-
+        }
+        int flip = INT_MAX;
+        int noFlip = INT_MAX;
         if(s[i]=='0')
         {
             if(prev==0)
             {
-                flip=1+solve(i+1,1,s,t);
-                noflip=solve(i+1,0,s,t);
+                noFlip = solve(i+1,0,s);
+                flip =1+solve(i+1,1,s); 
             }else{
-                flip=1+solve(i+1,1,s,t);
+                flip =1+solve(i+1,1,s);
             }
         }else{
-            if(prev==0)
+            if(prev==1)
             {
-                flip=1+solve(i+1,0,s,t);
-                noflip=solve(i+1,1,s,t);
+                noFlip = solve(i+1,1,s);
             }else{
-
-                noflip=solve(i+1,1,s,t);
+                flip = 1 + solve(i+1,0,s); 
+                noFlip = solve(i+1,1,s); 
             }
         }
 
-        return t[i][prev]=min(flip,noflip);
-
+        return t[i][prev] = min(flip,noFlip);
     }
     int minFlipsMonoIncr(string s) {
-        n=s.length();
-        int prev=0;
-        vector<vector<int>> t(n+1, vector<int>(2, -1));
-        return solve(0,prev,s,t);
-        
+        int n = s.length();
+        t.assign(n,vector<int>(2,-1));
+        return solve(0,0,s);
     }
 };
 
