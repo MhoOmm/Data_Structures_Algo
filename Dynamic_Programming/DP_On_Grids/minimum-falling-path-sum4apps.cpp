@@ -1,86 +1,86 @@
-//code correct but giving tle as tc is o(n^n *n)
-
-//memoization ka tc: o(n^3)
+//memoization ka tc: o(n^2)
 class Solution {
-    public:
-        int t[201][201];
-        int n;
-        int solve(int col,int row,vector<vector<int>>& grid)
+public:
+    int n;
+    int t[101][101];
+    int solve(vector<vector<int>>&matrix,int i,int j)
+    {
+        if(i>=n || j>=n || i<0 || j<0)
         {
-            if(row==n-1)
-            {
-                return grid[row][col];
-            }
-            if(t[row][col]!=-1)
-            {
-                return t[row][col];
-            }
-    
-            int ans=INT_MAX;
-            for(int nextcol=0;nextcol<n;nextcol++)
-            {
-                if( nextcol != col)
-                {
-                    ans=min(ans,solve(nextcol,row+1,grid));
-                }
-            }
-    
-            return t[row][col]=grid[row][col]+ans;
-    
+            return 1e9;
         }
-        int minFallingPathSum(vector<vector<int>>& grid) {
-    
-            n=grid.size();
-            int result=INT_MAX;
-            memset(t,-1,sizeof(t));
-            for(int col=0;col<n;col++)
-            {
-                result=min(result,solve(col,0,grid));
-            }
-            return result; 
+        if(i==n-1)
+        {
+            return matrix[i][j];
         }
-    };
-
-    // bottom up approach
-
-    class Solution {
-        public:
-            int minFallingPathSum(vector<vector<int>>& grid) {
-                int n=grid.size();
-        
-                vector<vector<int>>t(n,vector<int>(n));
-                //filling the bottom row of the dp matrix
-        
-                for(int i=0;i<n;i++)
-                {
-                    t[n-1][i]=grid[n-1][i];
-                }
-                for(int row=n-2;row>=0;row--)
-                {
-                    for(int col=0;col<n;col++)
-                    {
-                        int ans=INT_MAX;
-                        for(int nc=0;nc<n;nc++)
-                        {
-                            if(nc!=col)
-                            {
-                                ans=min(ans,t[row+1][nc]);
-                            }
-                        }
-                        t[row][col]=grid[row][col]+ans;
-                    }
-                
-                }
-        
-                int result=INT_MAX;
-                for(int j=0;j<n;j++)
-                {
-                    result=min(result,t[0][j]);
-                }
-        
-                return result; 
+        if(t[i][j]!= INT_MAX)
+        {
+            return t[i][j];
+        }
+        // down
+        int d = matrix[i][j] + solve(matrix,i+1,j);
+        // down left
+        int dl = matrix[i][j] + solve(matrix,i+1,j-1);
+        // down right
+        int dr = matrix[i][j] + solve(matrix,i+1,j+1);
+        return t[i][j] = min({d,dl,dr});
+    }
+    int minFallingPathSum(vector<vector<int>>& matrix) {
+        n = matrix.size();
+        int minSum = INT_MAX;
+        for(int i=0;i<101;i++)
+        {
+            for(int j=0;j<101;j++)
+            {
+                t[i][j] = INT_MAX;
             }
-        };
+        }
+        for(int j=0;j<n;j++)
+        {
+            int sum = solve(matrix,0,j);
+            minSum = min(sum,minSum);
+        }
+
+        return minSum;
+    }
+};
+
+// bottom up approach
+
+// bottom up approach
+class Solution {
+public:
+    int minFallingPathSum(vector<vector<int>>& matrix) {
+        int n = matrix.size();
+        vector<vector<int>>t(n,vector<int>(n,INT_MAX));  
+
+        // first row will have the matrix element
+        for(int j=0;j<n;j++)
+        {
+            t[0][j] = matrix[0][j];
+        }
+
+        for(int i=1;i<n;i++)
+        {
+            for(int j=0;j<n;j++)
+            {
+                int u =  t[i-1][j];
+                int ul = (j>0)?t[i-1][j-1]:1e9;
+                int ur = (j<n-1)?t[i-1][j+1]:1e9;
+                t[i][j] = matrix[i][j] + min({u,ul,ur});
+            }
+        }
+
+        // find the minimum from the last row;
+        int result = INT_MAX;
+        for(int j=0;j<n;j++)
+        {
+            result = min(result,t[n-1][j]);
+        }
+
+        return result;
+    }
+};
 
 // APPROACH 3 TIME OPTIMISED O(N^2)
 
