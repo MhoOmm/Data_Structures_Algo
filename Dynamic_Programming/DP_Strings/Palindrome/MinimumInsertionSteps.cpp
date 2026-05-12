@@ -3,33 +3,32 @@ using namespace std;
 
 //recur+memoization
 class Solution {
-    public:
-    
-        int n;
-    
-        int t[501][501];
-    
-        int recur(string &s,int i,int j)
+public:
+    int t[501][501];
+    int solve(string &s,int i,int j)
+    {
+        if(i>=j)
         {
-            if(i>=j)return 0;
-    
-            if(t[i][j]!=-1)
-            {
-                return t[i][j];
-            }
-            if(s[i]==s[j])
-            {
-                return t[i][j]=recur(s,i+1,j-1);
-            }else{
-                return t[i][j]=1+min(recur(s,i,j-1),recur(s,i+1,j));
-            }
+            return 0;
         }
-        int minInsertions(string s) {
-            n=s.length();
-            memset(t,-1,sizeof(t));
-            return recur(s,0,n-1);
+        if(t[i][j]!=-1)
+        {
+            return t[i][j];
         }
-    };
+
+        if(s[i]==s[j])
+        {
+            return t[i][j] = solve(s,i+1,j-1);
+        }else{
+            return t[i][j] = 1+ min(solve(s,i+1,j),solve(s,i,j-1));
+        }
+    }
+    int minInsertions(string s) {
+        int n = s.length();
+        memset(t,-1,sizeof(t));
+        return solve(s,0,n-1);
+    }
+};
 
 
 //bottom up approach
