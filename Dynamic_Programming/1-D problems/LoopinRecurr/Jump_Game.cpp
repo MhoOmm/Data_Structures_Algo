@@ -1,34 +1,32 @@
 //recursion + memoization
 //tc: o(n^2)
 class Solution {
-    public:
-        int n;
-        int t[100001];
-        bool solve(int i,int n,vector<int>& nums)
+public:
+    int t[10001];
+    bool solve(int i,vector<int>&nums)
+    {
+        if(i>=nums.size()-1)
         {
-            if(i>=n-1)
-            {
-                return true;
-            }
-            if(t[i]!=-1)
-            {
-                return t[i];
-            }
-            for(int j=1;j<=nums[i];j++){
-            
-                if(solve(i+j,n,nums)){
-                    return t[i]=true;
-                }
-            }
-            return t[i]=false;
+            return true;
         }
-        bool canJump(vector<int>& nums) {
-            n=nums.size();
-            memset(t,-1,sizeof(t));
-            return solve(0,n,nums);
-            
+        if(t[i]!=-1)
+        {
+            return t[i];
         }
-    };
+        for(int j=1;j<=nums[i];j++)
+        {
+            if(solve(i+j,nums))
+            {
+                return t[i] = true;
+            }
+        }
+        return t[i] = false;
+    }
+    bool canJump(vector<int>& nums) {
+        memset(t,-1,sizeof(t));
+        return solve(0,nums);
+    }
+};
 
 //bottom up
 //tc: o(n^2)
