@@ -31,3 +31,11 @@ public:
         return aliceTake > total-aliceTake; // compare between alice and bob
     }
 };
+
+// troll solution 
+class Solution {
+public:
+    bool stoneGame(vector<int>& piles) {
+        return true;
+    }
+};
