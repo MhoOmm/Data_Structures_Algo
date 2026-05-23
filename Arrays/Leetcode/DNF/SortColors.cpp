@@ -1,3 +1,4 @@
+// 2 pass solution
 class Solution {
 public:
     void sortColors(vector<int>& nums) {
@@ -33,6 +34,32 @@ public:
             else if(count2>0){
                 nums[i]=2;
                 count2--;
+            }
+        }
+    }
+};
+// dutch national flag
+class Solution {
+public:
+    void sortColors(vector<int>& nums) {
+        int n = nums.size();
+        int i =0;
+        int j =0;
+        int k = n-1;
+        while(j<=k)
+        {
+            if(nums[j]==1)
+            {
+                j++; // no need of change
+            }else if(nums[j]==2)
+            {
+                swap(nums[j],nums[k]);
+                k--;//we are sure 2 is place correctly
+            }
+            else{// j is at 0
+                swap(nums[i],nums[j]);
+                i++;
+                j++;
             }
         }
     }
