@@ -1,27 +1,39 @@
 class Solution {
 public:
-    unordered_map<string,double>mp;
-    double solve(int r,int c,int k,int n)
+    int N;
+    vector<vector<int>>directions={{1,2},{1,-2},{-1,2},{-1,-2},{2,1},{2,-1},{-2,1},{-2,-1}};
+    double t[26][26][101];
+    double solve(int row,int col,int k,int n)
     {
-        if(r<0||r>=n||c<0||c>=n)
-        {
-            return 0;//went out of bounds
+        if(row>=n || col>=n || row<0 || col<0){// out of bounds 
+            return 0;
         }
-        if(k==0)
+        if(t[row][col][k]!=-1)
+        {
+            return t[row][col][k];
+        }
+        if(k==0)//idhar aagya hai to within bounds
         {
             return 1;
         }
-        string key=to_string(r)+"_"+to_string(c)+"_"+to_string(k);
-        if(mp.find(key)!=mp.end())
+        double result = 0;
+        for(auto &dir:directions)
         {
-            return mp[key];
+            int ni = row +dir[0];
+            int nj = col +dir[1];
+            result += solve(ni,nj,k-1,n);
         }
-        double result=solve(r-2,c+1,k-1,n)+solve(r-2,c-1,k-1,n)+solve(r-1,c+2,k-1,n)+solve(r-1,c-2,k-1,n)+solve(r+2,c+1,k-1,n)+solve(r+2,c-1,k-1,n)+solve(r+1,c+2,k-1,n)+solve(r+1,c-2,k-1,n);
-
-        return mp[key]=double(result/8);
+        return t[row][col][k] = result;
     }
     double knightProbability(int n, int k, int row, int column) {
-        
-        return solve(row,column,k,n);
+        N = n;
+        for(int i=0;i<26;i++){
+            for(int j=0;j<26;j++){
+                for(int k=0;k<101;k++){
+                    t[i][j][k] = -1.0;
+                }
+            }
+        }
+        return solve(row,column,k,N)/pow(8,k);
     }
 };
