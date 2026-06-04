@@ -1,4 +1,4 @@
-// worst case -> O(5*n)
+// worst case -> O(n*log10(n))
 class Solution {
 public:
     int waviness(int num){
