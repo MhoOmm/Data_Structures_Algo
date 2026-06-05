@@ -1,33 +1,46 @@
-// BFS CODE
+// bfs
 class Solution {
 public:
-    bool validPath(int n, vector<vector<int>>& edges, int src, int dest) {
+    bool validPath(int n, vector<vector<int>>& edges, int source, int destination) {
+        int m = edges.size();
+        if(source == destination)
+        {
+            return true;
+        }
         vector<vector<int>>adj(n);
-        vector<bool>visited(n,false);
-        for(auto &edge:edges){
-            int u = edge[0];
-            int v = edge[1];
+        for(int i=0;i<m;i++)
+        {
+            int u = edges[i][0];
+            int v = edges[i][1];
             adj[u].push_back(v);
             adj[v].push_back(u);
         }
+
         queue<int>q;
-        q.push(src);
-        visited[src]= true;
-        while(!q.empty()){
+        vector<bool>visited(n,false);
+        q.push(source);
+        visited[source] = true;
+
+        while(!q.empty())
+        {
             int node = q.front();
             q.pop();
-            
-            if (node == dest) return true;
-
-            for(auto &neig:adj[node]){
-                if(!visited[neig]){
-                    visited[neig]= true;
+            for(auto &neig:adj[node])
+            {
+                // if one of the neighbours is destination
+                if(neig==destination)
+                {
+                    return true;
+                }
+                if(!visited[neig])
+                {
+                    visited[neig] = true;
                     q.push(neig);
                 }
             }
         }
 
-        return visited[dest];
+        return false;
     }
 };
 
