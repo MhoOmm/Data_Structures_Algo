@@ -80,3 +80,61 @@ public:
         
     }
 };
+
+
+
+// smaller code
+
+class Solution {
+public:
+    int m,n;
+    vector<vector<int>>directions{{0,1},{1,0},{-1,0},{0,-1}};
+    int bfs(int x,int y,vector<vector<int>>&grid)
+    {
+        queue<pair<int,int>>q;
+        grid[x][y] = 0;
+        int cells = 1;
+        q.push({x,y});
+        bool touchBoundary = false;
+        while(!q.empty())
+        {
+            int i = q.front().first;
+            int j = q.front().second;
+            q.pop();
+            if(i==0 || j==0 || i==m-1 || j==n-1)
+            {
+                touchBoundary = true;
+            }
+            for(auto &dir:directions)
+            {
+                int ni = i+dir[0];
+                int nj = j+dir[1];
+                if(ni>=0 && nj>=0 && ni<m && nj<n && grid[ni][nj]==1)
+                {
+                    grid[ni][nj] = 0;
+                    cells++;
+                    q.push({ni,nj});
+                }
+            }
+
+        }
+        return touchBoundary?0:cells;
+    }
+    int numEnclaves(vector<vector<int>>& grid) {
+        m = grid.size();
+        n = grid[0].size();
+        int enc = 0;
+
+        for(int i=0;i<m;i++)
+        {
+            for(int j=0;j<n;j++)
+            {
+                if(grid[i][j]==1)
+                {
+                    enc+=bfs(i,j,grid);
+                }
+            }
+        }
+        return enc;
+    }
+};
