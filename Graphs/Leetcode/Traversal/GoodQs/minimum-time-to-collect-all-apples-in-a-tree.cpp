@@ -37,6 +37,7 @@ public:
 };
 
 // another approach  -> if my child subtree has an apple i will add 2
+// O(v+e)
 class Solution {
 public:
     int time;
