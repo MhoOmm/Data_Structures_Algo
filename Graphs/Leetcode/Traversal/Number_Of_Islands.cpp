@@ -1,48 +1,45 @@
 class Solution {
 public:
     vector<vector<int>>directions{{0,1},{0,-1},{1,0},{-1,0}};
-    void bfs(int i,int j,queue<pair<int,int>>&q,vector<vector<char>>& grid){
-        grid[i][j]='$';
+    int m,n;
+    void bfs(int i,int j,vector<vector<char>>& grid)
+    {
+        queue<pair<int,int>>q;
         q.push({i,j});
-
-        while(!q.empty()){
-            auto curr = q.front();
+        grid[i][j]='2';
+        while(!q.empty())
+        {
+            int x = q.front().first;
+            int y = q.front().second;
             q.pop();
 
-            for(auto &dir:directions){
-                int ni = curr.first+dir[0];
-                int nj = curr.second+dir[1];
-                if(ni < 0 || ni >= grid.size() || nj < 0 || nj >= grid[0].size() || grid[ni][nj] != '1'){
-                    continue;
+            for(auto &dir:directions)
+            {
+                int ni = x+dir[0];
+                int nj = y+dir[1];
+                if(ni>=0 && nj>=0 && ni<m && nj<n && grid[ni][nj]=='1')
+                {
+                    grid[ni][nj] = '2';
+                    q.push({ni,nj});
                 }
-
-                q.push({ni,nj});
-                grid[ni][nj] ='$';
-
             }
         }
-
     }
     int numIslands(vector<vector<char>>& grid) {
-        if(grid.size() == 0)
-            return 0;
-        int n = grid.size();
-        int m = grid[0].size();
-        queue<pair<int,int>>q;
-        int noi=0;
-        for(int i=0;i<n;i++)
+        m = grid.size();
+        n = grid[0].size();
+        int count =0;
+        for(int i=0;i<m;i++)
         {
-            for(int j=0;j<m;j++)
+            for(int j=0;j<n;j++)
             {
                 if(grid[i][j]=='1')
                 {
-                    bfs(i,j,q,grid);
-                    noi++;
+                    bfs(i,j,grid);
+                    count++;
                 }
             }
         }
-
-        return noi;
-        
+        return count;
     }
 };
