@@ -44,3 +44,59 @@ class Solution {
 
   }
 };
+
+// clean code
+class Solution {
+public:
+    unordered_set<string>visited;
+    int bfs(unordered_set<string>&dead,string target,string start){
+        queue<string>q;
+        q.push(start);
+        int turns = 0;
+        visited.insert(start);
+        
+        while(!q.empty())
+        {
+            int size = q.size();
+            while(size--)
+            {
+                string str = q.front();
+                q.pop();
+                if(str == target)
+                {
+                    return turns;
+                }
+                for(int i=0;i<4;i++)
+                {
+                    string temp = str;
+                    // forward move
+                    temp[i] = temp[i]=='9'?'0':temp[i]+1;
+                    if(!dead.count(temp) && !visited.count(temp))
+                    {
+                        visited.insert(temp);
+                        q.push(temp);
+                    }
+                    // backward move
+                    temp = str;
+                    temp[i] = temp[i]=='0'?'9':temp[i]-1;
+                    if(!dead.count(temp) && !visited.count(temp))
+                    {
+                        visited.insert(temp);
+                        q.push(temp);
+                    }
+                }
+            }
+            turns++;
+        }
+
+        return -1;
+    }
+    int openLock(vector<string>& deadends, string target) {
+        unordered_set<string>dead(deadends.begin(),deadends.end());
+        if(dead.count("0000"))
+        {
+            return -1;
+        }
+        return bfs(dead,target,"0000");
+    }
+};
