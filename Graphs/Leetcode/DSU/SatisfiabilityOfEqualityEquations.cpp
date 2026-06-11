@@ -1,57 +1,64 @@
 class Solution {
 public:
-    vector<int>parent;
     vector<int>rank;
-    int find(int i,vector<int>&parent)
+    vector<int>parent;
+    int find(int x)
     {
-        if(i==parent[i])
+        if(parent[x] == x)
         {
-            return i;
+            return x;
         }
-
-        return parent[i]=find(parent[i],parent);
+        return parent[x] = find(parent[x]);
     }
 
-    void Union(int x,int y,vector<int>&parent,vector<int>&rank)
+    void Union(int x,int y)
     {
-        int par_x=find(x,parent);
-        int par_y=find(y,parent);
-
-        if(par_x>par_y)
+        int parx = find(x);
+        int pary = find(y);
+        if(parx==pary)
         {
-            parent[par_y]=par_x;
+            return;
         }
-        else if(par_x<par_y)
+
+        if(rank[parx]>rank[pary])
         {
-            parent[par_x]=par_y; 
+            parent[pary] = parx;
+        }
+        else if(rank[parx]<rank[pary])
+        {
+            parent[parx] = pary; 
         }
         else{
-            parent[par_x]=par_y;
-            rank[par_x]++;
+            parent[parx] = pary; 
+            rank[pary]++;
         }
     }
     bool equationsPossible(vector<string>& equations) {
+        int n = equations.size();
         parent.resize(26);
-        rank.resize(26);
+        rank.resize(26,0);
         for(int i=0;i<26;i++)
         {
-            parent[i]=i;
-            rank[i]=1;
+            parent[i] = i;
         }
-        for(string &s:equations)
+        for(int i=0;i<n;i++)
         {
-            if(s[1]=='=')
+            int al1 = equations[i][0]-'a';
+            int al2 = equations[i][3]-'a';
+            if(equations[i][1]==equations[i][2])
             {
-                Union(s[0]-'a',s[3]-'a',parent,rank);
+                Union(al1,al2);
             }
         }
-        for(string &s:equations)
+
+        // check if != but in same group -> return false else continue
+        for(auto &eq:equations)
         {
-            if(s[1]=='!')
+            int first = eq[0]-'a';
+            int second = eq[3]-'a';
+            if(eq[1]!=eq[2] && find(first)==find(second))
             {
-               if(find(s[0]-'a',parent) == find(s[3]-'a',parent)){
-                    return false;
-               }
+                return false;
             }
         }
 

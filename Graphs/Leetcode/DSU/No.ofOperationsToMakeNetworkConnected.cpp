@@ -57,57 +57,65 @@ class Solution {
 public:
     vector<int>parent;
     vector<int>rank;
-    int find(int i )
+    int find(int x)
     {
-        if(i==parent[i])
+        if(parent[x]==x)
         {
-            return i;
+            return x;
         }
-        return parent[i]=find(parent[i]);
+        return parent[x] = find(parent[x]);
     }
-
     void Union(int x,int y)
     {
-        int par_x = find(x);
-        int par_y = find(y);
-        if(rank[par_x]>rank[par_y])
+        int parx = find(x);
+        int pary = find(y);
+
+        if(parx==pary)return;
+
+        if(rank[parx]>rank[pary])
         {
-            parent[par_y]=par_x;
-        }else if(rank[par_y]>rank[par_x])
+            parent[pary] = parx;
+        }else if(rank[pary]>rank[parx])
         {
-            parent[par_x]=par_y;
+            parent[parx] = pary;
         }else{
-            parent[par_x]=par_y;
-            rank[par_y]++;
+           parent[parx] = pary; 
+           rank[pary]++;
         }
     }
     int makeConnected(int n, vector<vector<int>>& connections) {
-        if(connections.size()<n-1)
+        parent.resize(n);
+        rank.resize(n,0);
+        int edges = connections.size();
+        if(edges<n-1)
         {
             return -1;
         }
-        parent.resize(n);
         for(int i=0;i<n;i++)
         {
             parent[i]=i;
         }
-        rank.resize(n,0);
-        int count=0;
-        for(auto &vec:connections )
+        // for making connections
+        int grp = 0;
+        for(int i=0;i<edges;i++)
         {
-            int u=vec[0];
-            int v=vec[1];
-            Union(u,v);
-        }
+            int x = connections[i][0];
+            int y = connections[i][1];
 
-        for(int i = 0;i<n;i++)
-        {
-            if(parent[i]==i)
+            if(find(x)!=find(y))
             {
-                count++;
+                Union(x,y);
             }
         }
+        for(int i=0;i<n;i++)
+        {
+            if(find(i)==i) // in the same group
+            {
+                grp++;
+            }
 
-        return count-1;
+        }
+
+        return grp-1;
     }
 };
