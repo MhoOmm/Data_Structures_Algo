@@ -2,8 +2,9 @@
 class Solution {
 public:
     int minScore(int n, vector<vector<int>>& roads) {
+        vector<bool>visited(n+1,false);
+        vector<vector<pair<int,int>>>adj(n+1);
 
-        vector<vector<pair<int,int>>> adj(n + 1);
         for(auto &edge:roads)
         {
             int u = edge[0];
@@ -15,32 +16,26 @@ public:
         }
 
         queue<int>q;
-        vector<int>visited(n+1,false);
         q.push(1);
         visited[1] = true;
-        int minwt  = INT_MAX;
-    
-        while(!q.empty())
-        {
+        int result = INT_MAX;
+        while(!q.empty()){
             int node = q.front();
             q.pop();
-            for(auto &neig:adj[node])
+            for(auto &neigh:adj[node])
             {
-                int v = neig.first;
-                int wt = neig.second;
-
-                minwt = min(minwt,wt);
-
-                if(!visited[v])
+                int ngbr = neigh.first;
+                int wt = neigh.second;
+                result = min(result,wt);
+                if(!visited[ngbr])
                 {
-                    visited[v]= true;
-                    q.push(v);
-                }
+                    q.push(ngbr);
+                    visited[ngbr] = true;
+                } 
             }
         }
 
-        return minwt;
-        
+        return result;
     }
 };
 
