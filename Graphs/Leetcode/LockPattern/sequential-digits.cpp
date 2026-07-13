@@ -2,25 +2,30 @@ class Solution {
 public:
     vector<int> sequentialDigits(int low, int high) {
         queue<int>q;
-        for(int i=1;i<9;i++)
+        for(int i=1;i<=9;i++)
         {
             q.push(i);
         }
         vector<int>ans;
         while(!q.empty()){
-            int num = q.front();
-            q.pop();
-            if(num>=low && num<=high)
+            int size = q.size();
+            while(size--)
             {
-                ans.push_back(num);
-            }
-
-            int last = num%10;
-            if(last == 9)continue;
-            int mod = (num*10 + (last+1));
-            if(mod<=high)
-            {
-                q.push(mod);
+                int num = q.front();
+                q.pop();
+                // next sequential digit
+                int last = num%10;
+                num = num*10 + (last+1);
+                if(last == 9)continue;
+                if(num>high)
+                {
+                    break;
+                }
+                if(low<=num && num<=high)
+                {
+                    ans.push_back(num);
+                }
+                q.push(num);
             }
         }
         return ans;
