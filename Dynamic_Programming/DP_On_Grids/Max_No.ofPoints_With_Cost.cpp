@@ -1,3 +1,44 @@
+// top-down approach - giving tle - O(mn^2)
+class Solution {
+public:
+    int n,m;
+    vector<vector<long long>>dp;
+    long long solve(int i,int j,vector<vector<int>>&points)
+    {
+        if(i<0 || j<0 || j>=n || i>=m)
+        {
+            return LLONG_MIN; // very small value;
+        }
+        if(i==m-1)
+        {
+            return points[i][j];
+        }
+        if(dp[i][j]!=LLONG_MIN)
+        {
+            return dp[i][j];
+        }
+        long long ans = LLONG_MIN;
+        for(int k=0;k<n;k++)
+        {
+            long long nextEle = solve(i+1,k,points);
+            if(nextEle != LLONG_MIN){
+                ans = max(ans,points[i][j] + nextEle - abs(j-k)); 
+            }
+        }
+        return dp[i][j] =  ans;
+    }
+    long long maxPoints(vector<vector<int>>& points) {
+        m = points.size();
+        n = points[0].size();
+        long long result = LLONG_MIN;
+        dp.assign(m, vector<long long>(n, LLONG_MIN));
+        for(int j=0;j<n;j++)
+        {
+            result = max(result,solve(0,j,points));
+        }
+        return result;
+    }
+};
 
 // tc: o(m*n*n)
 
