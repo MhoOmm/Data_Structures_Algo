@@ -53,3 +53,58 @@ public:
 
     }
 };
+
+
+// dfs version
+class Solution {
+public:
+
+    bool dfs(int node, vector<int>& mark, vector<vector<int>>& adj)
+    {
+        for(auto &neig : adj[node])
+        {
+            // Unvisited
+            if(mark[neig] == -1)
+            {
+                mark[neig] = 1 - mark[node];
+
+                if(!dfs(neig, mark, adj))
+                    return false;
+            }
+            // Already visited and same color
+            else if(mark[neig] == mark[node])
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    bool possibleBipartition(int n, vector<vector<int>>& dislikes)
+    {
+        vector<vector<int>> adj(n + 1);
+
+        for(auto &edge : dislikes)
+        {
+            int u = edge[0];
+            int v = edge[1];
+            adj[u].push_back(v);
+            adj[v].push_back(u);
+        }
+
+        vector<int> mark(n + 1, -1);
+        for(int i = 1; i <= n; i++)
+        {
+            if(mark[i] == -1)
+            {
+                mark[i] = 0;
+
+                if(!dfs(i, mark, adj))
+                    return false;
+            }
+        }
+
+        return true;
+    }
+};

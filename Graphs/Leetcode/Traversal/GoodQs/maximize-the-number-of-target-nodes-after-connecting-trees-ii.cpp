@@ -83,3 +83,70 @@ public:
 };
 
 // optimised approach
+
+
+class Solution {
+public:
+    int n1,n2;
+    unordered_map<int, vector<int>> getAdj(vector<vector<int>>& edges) {
+        unordered_map<int, vector<int>> adj;
+        for(auto &edge : edges) {
+            int u = edge[0];
+            int v = edge[1];
+
+            adj[u].push_back(v);
+            adj[v].push_back(u);
+        }
+
+        return adj;
+    }
+    // dfs(0,parent,markT1,zeroMark1,oneMark1,adj1);
+    void dfs(int node,int parent,vector<int>&mark,int &zeroMark,int &oneMark,unordered_map<int,vector<int>>&adj)
+    {
+        if(mark[node]==0)
+        {
+            zeroMark++;
+        }else{
+            oneMark++;
+        }
+
+        for(auto &neig:adj[node])
+        {
+            if(neig==parent)
+            {
+                continue;
+            }
+            mark[neig] = (mark[node]==1)?0:1;
+            dfs(neig,node,mark,zeroMark,oneMark,adj);
+        }
+    }
+    vector<int> maxTargetNodes(vector<vector<int>>& edges1, vector<vector<int>>& edges2) {
+        n1  = edges1.size() + 1;
+        n2  = edges2.size() + 1;
+        // making the adj
+        unordered_map<int, vector<int>> adj1 = getAdj(edges1);
+        unordered_map<int, vector<int>> adj2 = getAdj(edges2);
+
+        // counting marked for first tree
+        vector<int>markT1(n1,-1);
+        int zeroMark1 = 0;
+        int oneMark1 = 0;
+        markT1[0] = 0; // marking the first node as zero
+        dfs(0,-1,markT1,zeroMark1,oneMark1,adj1);
+        
+        // counting marked for first tree
+        vector<int>markT2(n2,-1);
+        int zeroMark2 = 0;
+        int oneMark2 = 0;
+        markT2[0] = 0; // marking the first node as zero
+        dfs(0,-1,markT2,zeroMark2,oneMark2,adj2);
+
+        int maxMarkedT2 = max(zeroMark2,oneMark2);
+        vector<int>result(n1,0);
+        for(int i=0;i<n1;i++)
+        {
+            result[i] = (markT1[i]==0 ? zeroMark1 : oneMark1) + maxMarkedT2;
+        }
+        return result;
+    }
+};
